@@ -1,0 +1,98 @@
+boolean GameStart= false;
+boolean GameOver = false;
+int AmountLowered = 0;
+boolean nextStage = false;
+int rising = 0;
+Blender b;
+Blood blood;
+  int x = 0;
+  int y = 0;
+Mickey mouse = new Mickey(700, 300+y); //the y value shloud be a variable
+GameOver dead = new GameOver(700,400);
+
+Bloodspatter[] spatters = new Bloodspatter[500];
+int spatterCount = 0;
+
+boolean gameStarted = false;
+float dotVisibleDuration = 1500;  // how long dot stays
+float dotDelay = 1000;            // delay before next dot
+float lastDotTime = 0;
+
+void setup() {
+  b = new Blender();
+  blood = new Blood(700, 600, 1400, 0);
+
+
+  size (1400, 800);
+  rectMode(CENTER);
+  ellipseMode(CENTER);
+}
+
+void mousePressed() {
+  if ((mouseX-700)*(mouseX-700) + (mouseY-750)*(mouseY-750) <= 4900) {
+    GameStart = true;
+  }
+}
+
+
+void keyPressed() {
+  if (key == ' ' && GameStart) {
+    blood.update();
+    if (rising<= 2){
+    y += 100;
+    } 
+    else {
+    y += 30;
+    }
+    
+    for (int i = 0; i < 5; i++) {
+    if (spatterCount < spatters.length) {
+      float x = random (width);
+      float y = random (height);
+      float d = random (10,200);
+      float a = random (50,200); //random transparency
+      spatters[spatterCount] = new Bloodspatter(x, y, d, a);
+      spatterCount++;
+    }
+  }
+
+  }
+}
+
+
+
+
+
+
+
+
+Draw
+============================
+void draw() {
+  background(255);
+
+  if (!GameOver) {
+    mouse.display(); //This the mickey, its y can be a variable
+    }
+    
+  if (GameStart && !GameOver) {
+    blood.drawBlood();
+  }
+
+  if (!GameOver) {
+
+    b.display();
+  }
+
+  if (rising >= 4) {
+    GameOver = true;
+  }
+  if(!GameOver){
+  for (int i = 0; i < spatterCount; i++) {
+    spatters[i].drawSpatter();
+  }
+  }
+  if (GameOver){
+    dead.display();//this can be in the if loop (it is the Game Over)
+  }
+}

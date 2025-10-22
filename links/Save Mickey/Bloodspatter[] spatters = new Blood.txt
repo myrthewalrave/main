@@ -1,0 +1,54 @@
+Bloodspatter[] spatters = new Bloodspatter[500];
+int spatterCount = 0;
+
+boolean GameStart= false;
+boolean GameOver = false;
+boolean nextStage = false;
+int AmountLowered = 0; 
+    
+void setup(){
+    size (1400,800);
+    rectMode(CENTER);
+    ellipseMode(CENTER);
+}
+
+void draw() {
+  background (255);
+  for (int i = 0; i < spatterCount; i++) {
+    spatters[i].drawSpatter();
+  }
+}
+
+void mousePressed () {
+  for (int i = 0; i < 5; i++) {
+    if (spatterCount < spatters.length) {
+      float x = random (width);
+      float y = random (height);
+      float d = random (10,200);
+      float a = random (50,200); //random transparency
+      spatters[spatterCount] = new Bloodspatter(x, y, d, a);
+      spatterCount++;
+    }
+  }
+}
+  
+    CLASS BLOODSPATTER==============================
+
+class Bloodspatter {
+  float x, y, d;
+  float alpha;
+  
+  Bloodspatter(float spatterX, float spatterY, float spatterD, float spatterAlpha) {
+    x = spatterX;
+    y = spatterY;
+    d = spatterD; //diameter
+    alpha = spatterAlpha;
+    
+  }  
+  
+  void drawSpatter() {
+    fill(219, 22, 22, 150);
+    noStroke();
+    circle(x, y, d);
+  }
+}
