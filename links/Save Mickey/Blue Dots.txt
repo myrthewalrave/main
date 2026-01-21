@@ -1,0 +1,90 @@
+FIXED BY CHATGPT VERSION:                            
+Dot currentDot;
+boolean gameStarted = false;
+float dotVisibleDuration = 1500;  // how long dot stays
+float dotDelay = 1000;            // delay before next dot
+float lastDotTime = 0;
+
+void setup() {
+  size(1400, 800);
+  ellipseMode(CENTER);
+  rectMode(CENTER);
+  !!!!!!currentDot = new Dot(width/2, height/2, color(0, 0, 255));  // first dot in the middle
+}
+
+void draw() {
+  background(255);
+
+  // if dot exists, draw it
+  if (currentDot != null) {
+    currentDot.display();
+  }
+
+  // timing
+  if (gameStarted) {
+    // if dot exists and time passed
+    if (currentDot != null && millis() - currentDot.spawnTime > dotVisibleDuration) {
+
+      if (!currentDot.clicked) {
+        
+      }
+
+      // remove the dot after time is up
+      currentDot = null;
+      lastDotTime = millis();
+    }
+
+    // spawn next dot after delay
+    if (currentDot == null && millis() - lastDotTime > dotDelay) {
+      spawnNextDot();
+    }
+  }
+}
+
+void mousePressed() {
+  if (currentDot != null && currentDot.isClicked(mouseX, mouseY)) {
+    if (!gameStarted) {
+      gameStarted = true;  // start the game when first dot is clicked
+    }
+    // dot clicked
+    currentDot.clicked = true;
+    currentDot = null;       // remove the dot when clicked
+    lastDotTime = millis();  // start delay for next dot
+  }
+}
+
+void spawnNextDot() {
+  float margin = 50;
+  float x = random(margin, width - margin);
+  float y = random(margin, height - margin);
+  currentDot = new Dot(x, y, color(0, 0, 255));
+}
+
+class Dot {
+  float x, y;
+  float radius = 30;
+  color dotColor;
+  boolean clicked = false;
+  boolean active = false;
+  float spawnTime;
+
+  Dot(float X, float Y, color c) {
+    x = X;
+    y = Y;
+    dotColor = c;
+    spawnTime = millis();
+    active = true;
+  }
+
+  void display() {
+    if (active) {
+      fill(dotColor);
+      ellipse(x, y, radius * 2, radius * 2);
+    }
+  }
+
+  boolean isClicked(float mx, float my) {
+    float distance = dist(mx, my, x, y);
+    return distance <= radius;
+  }
+}

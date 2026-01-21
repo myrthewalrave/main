@@ -1,0 +1,39 @@
+in draw:
+
+  //if (keyPressed && key == ' ') {
+  //  nextStage = true;
+  //}
+  
+  //if (nextStage) {
+  //  blood.rise (300, 2000);
+  //}
+
+
+
+in void update():
+
+   
+    
+    
+    
+    
+  //  if (rising) {
+  //    float elapsed = millis () - startTime;
+  //    float progress = elapsed / duration;
+      
+  //    if (progress >= 1) {
+  //      progress = 1;
+  //      rising = false;
+  //    }
+  //    y = startY + (targetY - startY) * progress;
+  //  }
+  //}
+
+
+  //void rise (float amount, float durationMS) {
+  //  rising = true;
+  //  startTime = millis();
+  //  duration = durationMS;
+  //  startY = y;
+  //  targetY = max(0, y-amount); //so it doesn't go above the screen
+  //  //speed = 30; // the higher, the faster it rises
