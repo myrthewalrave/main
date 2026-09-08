@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Game-Myrthe Walrave</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			body {
+				background-image: url('images/overlay.png'), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('images/Background1-01.png');
+				background-size: auto, auto, 100% auto;
+				background-position: center, center, top center;
+				background-repeat: repeat, no-repeat, no-repeat;
+				background-attachment: scroll, fixed, fixed;
+			}
+			#wrapper {
+				-moz-transition: opacity 0.5s ease;
+				-webkit-transition: opacity 0.5s ease;
+				-ms-transition: opacity 0.5s ease;
+				transition: opacity 0.5s ease;
+				position: relative;
+				z-index: 1;
+				overflow: hidden;
+			}
+			#wrapper.fade-in:before {
+				pointer-events: none;
+				-moz-transition: opacity 1s ease-in-out;
+				-webkit-transition: opacity 1s ease-in-out;
+				-ms-transition: opacity 1s ease-in-out;
+				transition: opacity 1s ease-in-out;
+				-moz-transition-delay: 0.75s;
+				-webkit-transition-delay: 0.75s;
+				-ms-transition-delay: 0.75s;
+				transition-delay: 0.75s;
+				background: #1e252d;
+				content: '';
+				display: block;
+				height: 100%;
+				left: 0;
+				opacity: 0;
+				position: fixed;
+				top: 0;
+				width: 100%;
+			}
+			body.is-preload #wrapper.fade-in:before {
+				opacity: 0;
+			}
+			#gameContainer {
+				display: flex;
+				gap: 100px;
+				padding: 60px 0px;
+				max-width: 1200px;
+				margin: 0 auto;
+				background-image: url('images/Background.png');
+				background-size: 1200px 2400px;
+				background-position: center;
+				background-repeat: no-repeat;
+				border-radius: 0px;
+				position: relative;
+				z-index: 2;
+			}
+			#gameArea {
+				flex: 1;
+				text-align: center;
+			}
+			#shopPanel {
+				width: 400px;
+				background: rgba(0, 0, 0, 0.3);
+				border-radius: 12px;
+				padding: 20px;
+				height: 800px;
+				border: 2px solid rgba(102, 126, 234, 0.5);
+				overflow-y: auto;
+				flex-shrink: 0;
+			}
+			#shopPanel h2 {
+				margin-top: 0;
+				color: #667eea;
+			}
+			#upgradesContainer {
+				display: flex;
+				gap: 10px;
+				overflow-x: auto;
+				padding-bottom: 10px;
+				margin-bottom: 10px;
+				scroll-behavior: smooth;
+			}
+			#upgradesContainer::-webkit-scrollbar {
+				height: 6px;
+			}
+			#upgradesContainer::-webkit-scrollbar-track {
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 3px;
+			}
+			#upgradesContainer::-webkit-scrollbar-thumb {
+				background: rgba(102, 126, 234, 0.5);
+				border-radius: 3px;
+			}
+			#upgradesContainer::-webkit-scrollbar-thumb:hover {
+				background: rgba(102, 126, 234, 0.8);
+			}
+			.upgrade-item {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(102, 126, 234, 0.3);
+				border-radius: 8px;
+				padding: 12px;
+				text-align: center;
+				flex-shrink: 0;
+				min-width: 120px;
+			}
+			.upgrade-item h3 {
+				margin: 0 0 8px 0;
+				font-size: 14px;
+			}
+			.upgrade-item p {
+				margin: 4px 0;
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.8);
+			}
+			.shop-item {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(102, 126, 234, 0.3);
+				border-radius: 8px;
+				padding: 12px;
+				margin-bottom: 12px;
+				text-align: center;
+				transition: all 0.3s ease;
+			}
+			.shop-item:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(102, 126, 234, 0.6);
+			}
+			.shop-item h3 {
+				margin: 0 0 8px 0;
+				font-size: 16px;
+			}
+			.shop-item img {
+				width: 200px;
+				height: 200px;
+				object-fit: contain;
+				margin-bottom: 8px;
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.shop-item .price {
+				font-weight: bold;
+				margin: 8px 0;
+			}
+			.shop-item p {
+				margin: 4px 0;
+				font-size: 13px;
+				color: rgba(255, 255, 255, 0.8);
+				opacity: 0;
+				max-height: 0;
+				overflow: hidden;
+				transition: opacity 0.3s ease, max-height 0.3s ease;
+			}
+			.shop-item:hover p {
+				opacity: 1;
+				max-height: 100px;
+			}
+			.shop-item .buy-btn {
+				margin-top: 8px;
+			}
+			.upgrade-item {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(102, 126, 234, 0.3);
+				border-radius: 8px;
+				padding: 12px;
+				text-align: center;
+				flex-shrink: 0;
+				min-width: 120px;
+				transition: all 0.3s ease;
+			}
+			.upgrade-item:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(102, 126, 234, 0.6);
+				transform: scale(1.05);
+			}
+			.upgrade-item.owned {
+				cursor: default;
+				opacity: 0.6;
+			}
+			.shop-item.affordable,
+			.upgrade-item.affordable {
+				border-color: #667eea;
+				box-shadow: 0 0 12px rgba(102, 126, 234, 0.6), inset 0 0 12px rgba(102, 126, 234, 0.2);
+			}
+			.upgrade-item h3 {
+				margin: 0 0 8px 0;
+				font-size: 14px;
+			}
+			.upgrade-item p {
+				margin: 4px 0;
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.8);
+			}
+			.buy-btn {
+				width: 100%;
+				padding: 8px;
+				margin-top: 8px;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				border: none;
+				border-radius: 6px;
+				cursor: pointer;
+				font-weight: bold;
+				transition: opacity 0.2s;
+			}
+			.buy-btn:hover:not(:disabled) {
+				opacity: 0.8;
+			}
+			.buy-btn:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+			#clickButton {
+				width: 250px;
+				height: 250px;
+				background-image: url('images/Funky_Button.png');
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				border: none;
+				padding: 0;
+				overflow: visible;
+				text-indent: -9999px;
+				cursor: pointer;
+				transition: transform 0.1s;
+				outline: none;
+				box-shadow:none;
+			}
+			#clickButton:focus {
+				outline: none;
+				box-shadow: none;
+			}
+			.click-text {
+				font-size: 24px;
+				margin: 0 0 15px 0;
+				text-align: center;
+			}
+			#clickButton:hover {
+				transform: scale(1.05);
+			}
+			#clickButton:active {
+				transform: scale(0.95);
+			}
+			.stats {
+				margin-top: 30px;
+				font-size: 20px;
+			}
+			.stat-item {
+				margin: 15px 0;
+				padding: 10px;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 8px;
+			}
+		</style>
+	</head>
+<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Cat Clicker</a>
+					</header>
+				
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="me.html">About Me</a></li>
+							<li class="active"><a href="game.html">Game</a></li>
+							<li><a href="contact.html">Contact Page</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://nl.linkedin.com/in/myrthe-walrave-5a5126351" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div id="gameContainer">
+							<div id="backgroundImage"></div>
+						<div id="gameArea">
+							<h1>Cat Clicker</h1>
+							<div class="click-text">Click Me!</div>
+							<button id="clickButton"></button>
+							<div class="stats">
+								<div class="stat-item">Clicks: <span id="clickCount">0</span></div>
+								<div class="stat-item">Clicks per Second: <span id="cps">0</span></div>
+								<button id="resetBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Reset Game</button>
+							</div>
+						</div>
+						<div id="shopPanel">
+    						<h2>🏪 Shop</h2>
+    						<div style="margin-bottom: 15px;">
+    							<p style="margin: 0 0 8px 0; font-size: 13px; color: #667eea;">⭐ Upgrades</p>
+    							<div id="upgradesContainer"></div>
+    						</div>
+    						<hr style="margin: 15px 0; opacity: 0.5;">
+    						<div id="shopContainer"></div>
+						</div>
+						</div>
+					</div>
+			</div>
+
+	<script src="assets/js/game.js"></script>
+</body>
+
+
+
+
